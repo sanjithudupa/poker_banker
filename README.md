@@ -1,30 +1,13 @@
-# React + TypeScript + Vite
+# Poker Banker
+This is just a React Vite Typescript SPA with static routing.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The banker allows for any number of players with unliimited custom amount buy ins and will calculate the best scheme for paying each player back to minimize the total # of transactions.
 
-Currently, two official plugins are available:
+All the interesting logic is contained in `src/pages/Banker.tsx` and the `calculatePayouts` method is the part that calculates how much each player gets.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## How Payouts are Calculated
+First, players are split into two sorted lists of `profits` and `losses` indicating whether or not a player lost money.
 
-## Expanding the ESLint configuration
+Then the lists are worked through independently in an effective two pointer algorithm matching each next highest loss with the next highest profit, and then adjusting for differences between the two.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+This results in a very fast means of calculating the fewest number of transactions needed. 
